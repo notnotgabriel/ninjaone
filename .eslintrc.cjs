@@ -6,19 +6,18 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
     'plugin:react/recommended',
-    'plugin:import/recommended',
     'plugin:jsx-a11y/recommended',
     'eslint-config-prettier',
-    'plugin:@tanstack/eslint-plugin-query/recommended',
+    'plugin:@tanstack/eslint-plugin-query/recommended'
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs', 'node_modules'],
   parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh'],
+  plugins: ['react-refresh', 'jsx-a11y'],
   rules: {
     'react-refresh/only-export-components': [
       'warn',
-      { allowConstantExport: true },
+      { allowConstantExport: true }
     ],
-    'react/react-in-jsx-scope': 'off',
-  },
-};
+    'react/react-in-jsx-scope': 'off'
+  }
+}
