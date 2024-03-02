@@ -1,3 +1,5 @@
+import 'react-toastify/dist/ReactToastify.css'
+
 import { AppShell as MantineAppShell, Image } from '@mantine/core'
 import { ToastContainer } from 'react-toastify'
 
