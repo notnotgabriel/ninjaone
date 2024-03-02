@@ -1,4 +1,4 @@
-import { renderer } from './test/renderer'
+import { renderer } from '../test/renderer'
 
 import App from './App'
 
