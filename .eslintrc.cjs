@@ -5,8 +5,10 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
-    'plugin:react/recommended',
+    'plugin:prettier/recommended',
     'plugin:jsx-a11y/recommended',
+    'plugin:react/recommended',
+    'react-app/jest',
     'eslint-config-prettier',
     'plugin:@tanstack/eslint-plugin-query/recommended'
   ],
