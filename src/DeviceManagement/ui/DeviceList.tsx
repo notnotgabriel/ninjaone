@@ -3,9 +3,10 @@ import { Table, Image, Group, Text, Skeleton, Stack } from '@mantine/core'
 import windowsIcon from '../../core/ui/assets/icons/windows.svg'
 import { DeviceMenu } from './DeviceMenu'
 import { useFetchDeviceList } from './hooks/useFetchDeviceList'
+import { Filter } from './Filter'
 
 export function DeviceList() {
-  const { data, isLoading } = useFetchDeviceList()
+  const { data, isLoading, filterByName } = useFetchDeviceList()
 
   if (isLoading) {
     return (
@@ -19,6 +20,7 @@ export function DeviceList() {
 
   return (
     <>
+      <Filter filterByName={filterByName} />
       <Table>
         <Table.Thead>
           <Table.Tr>

@@ -2,13 +2,27 @@ import { Group, TextInput, Select, Image } from '@mantine/core'
 import { ActionIcon } from '@mantine/core'
 
 import refreshIcon from '../../core/ui/assets/icons/sync.svg'
+import { type DeviceType } from '../domain/device'
 
-export function Filter() {
-  const deviceTypeOptions = ['All', 'React', 'Angular', 'Vue', 'Svelte']
+type FilterProps = {
+  filterByName: (name: string | null) => void
+}
+
+export function Filter({ filterByName }: FilterProps) {
+  const deviceTypeOptions: DeviceType[] = ['WINDOWS', 'LINUX', 'MAC']
   const hddCapacitySortOptions = ['ascending', 'descending']
+
+  const handleFilterByName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    filterByName(event.target.value)
+  }
+
   return (
     <Group>
-      <TextInput label='Search by name' placeholder='Search' />
+      <TextInput
+        label='Search by name'
+        placeholder='Search'
+        onChange={handleFilterByName}
+      />
       <Select
         label='Device Type'
         placeholder='Device Type: All'
