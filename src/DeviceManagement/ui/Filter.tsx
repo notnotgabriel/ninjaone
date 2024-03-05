@@ -3,21 +3,29 @@ import { ActionIcon } from '@mantine/core'
 
 import refreshIcon from '../../core/ui/assets/icons/sync.svg'
 import { deviceTypes } from '../domain/device'
+import { type SortingType, sortingTypes } from '../domain/filter'
 
 type FilterProps = {
   filterByName: (name: string | null) => void
   filterDeviceByType: (type: string | null) => void
+  sortByCapacity: (type: SortingType | null) => void
 }
 
-export function Filter({ filterByName, filterDeviceByType }: FilterProps) {
-  const hddCapacitySortOptions = ['ascending', 'descending']
-
+export function Filter({
+  filterByName,
+  filterDeviceByType,
+  sortByCapacity
+}: FilterProps) {
   const handleFilterByName = (event: React.ChangeEvent<HTMLInputElement>) => {
     filterByName(event.target.value)
   }
 
   const handleFilterByType = (value: string | null) => {
     filterDeviceByType(value)
+  }
+
+  const handleSortByCapacity = (value: string | null) => {
+    sortByCapacity(value as SortingType)
   }
 
   return (
@@ -37,8 +45,9 @@ export function Filter({ filterByName, filterDeviceByType }: FilterProps) {
       <Select
         label='Sort by: HDD Capacity'
         placeholder='Sort by: HDD Capacity (Descending)'
-        data={hddCapacitySortOptions}
+        data={sortingTypes}
         style={{ width: '300px' }}
+        onChange={handleSortByCapacity}
         clearable
       />
       <ActionIcon

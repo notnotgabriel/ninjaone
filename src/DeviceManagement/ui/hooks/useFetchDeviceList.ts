@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { fetchDeviceList } from '../../infra/DeviceRepository'
 import { useDeviceListFilter } from './useDeviceListFilter'
 import { useEffect } from 'react'
+import { SortingType } from '../../domain/filter'
 
 export function useFetchDeviceList() {
   const {
@@ -41,11 +42,19 @@ export function useFetchDeviceList() {
     })
   }
 
+  function sortByCapacity(sortingType: SortingType | null) {
+    dispatch({
+      type: 'SORT_BY_CAPACITY',
+      sortingType
+    })
+  }
+
   return {
     data,
     isFetched,
     filterByName,
     filterDeviceByType,
+    sortByCapacity,
     ...rest
   }
 }

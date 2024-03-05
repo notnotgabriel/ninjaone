@@ -5,7 +5,7 @@ import { Filter } from './Filter'
 import { SystemTypeIcon } from './SystemTypeIcon'
 
 export function DeviceList() {
-  const { data, isLoading, filterByName, filterDeviceByType } =
+  const { data, isLoading, filterByName, filterDeviceByType, sortByCapacity } =
     useFetchDeviceList()
 
   if (isLoading) {
@@ -23,6 +23,7 @@ export function DeviceList() {
       <Filter
         filterByName={filterByName}
         filterDeviceByType={filterDeviceByType}
+        sortByCapacity={sortByCapacity}
       />
       <Table>
         <Table.Thead>

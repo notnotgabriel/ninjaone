@@ -13,7 +13,13 @@ export function AddDeviceDialog({ opened, onClose }: ModalProps) {
   const hddCapacitySortOptions = ['ascending', 'descending']
 
   return (
-    <Modal opened={opened} onClose={onClose} title='Add device' centered>
+    <Modal
+      opened={opened}
+      onClose={onClose}
+      title='Add device'
+      centered
+      removeScrollProps={{ removeScrollBar: false }}
+    >
       <Modal.Body p={0}>
         <Stack>
           <Stack gap='sm'>
