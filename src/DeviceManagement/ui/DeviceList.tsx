@@ -1,11 +1,22 @@
-import { Table, Image, Group, Text } from '@mantine/core'
-import createHttpClient from '../../core/infra/HttpClient'
+import { Table, Image, Group, Text, Skeleton, Stack } from '@mantine/core'
 
 import windowsIcon from '../../core/ui/assets/icons/windows.svg'
 import { DeviceMenu } from './DeviceMenu'
+import { useFetchDeviceList } from './hooks/useFetchDeviceList'
 
 export function DeviceList() {
-  createHttpClient.get('/devices')
+  const { data, isLoading } = useFetchDeviceList()
+
+  if (isLoading) {
+    return (
+      <Stack gap='xs' data-testid='loading-device-list'>
+        <Skeleton height={8} radius='xl' />
+        <Skeleton height={8} mt={6} radius='xl' />
+        <Skeleton height={8} mt={6} width='70%' radius='xl' />
+      </Stack>
+    )
+  }
+
   return (
     <>
       <Table>
@@ -15,22 +26,28 @@ export function DeviceList() {
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          <Table.Tr>
-            <Table.Td>
-              <Group>
-                <div>
-                  <Group gap={'xs'}>
-                    <Image src={windowsIcon} alt='' style={{ width: '14px' }} />
-                    <Text>DESKTOP-0VCBIFF</Text>
-                  </Group>
-                  <Text size='sm' c='#6E6D7A'>
-                    Windows workstation - 128 GB
-                  </Text>
-                </div>
-                <DeviceMenu />
-              </Group>
-            </Table.Td>
-          </Table.Tr>
+          {(data || []).map((device) => (
+            <Table.Tr key={device.id}>
+              <Table.Td>
+                <Group>
+                  <div>
+                    <Group gap={'xs'}>
+                      <Image
+                        src={windowsIcon}
+                        alt=''
+                        style={{ width: '14px' }}
+                      />
+                      <Text>{device.system_name}</Text>
+                    </Group>
+                    <Text size='sm' c='#6E6D7A'>
+                      {device.type} workstation - {device.hdd_capacity} GB
+                    </Text>
+                  </div>
+                  <DeviceMenu />
+                </Group>
+              </Table.Td>
+            </Table.Tr>
+          ))}
         </Table.Tbody>
       </Table>
     </>
