@@ -37,15 +37,17 @@ export async function createDevice(body: NewDevice): Promise<Device> {
   }
 }
 
+export type UpdateDeviceData = {
+  body: NewDevice
+  deviceID: string
+}
+
 export async function updateDevice({
   body,
   deviceID
-}: {
-  body: any
-  deviceID: string
-}): Promise<Device> {
+}: UpdateDeviceData): Promise<Device> {
   try {
-    const { data } = await HttpClient.post(`/devices/${deviceID}`, body)
+    const { data } = await HttpClient.put(`/devices/${deviceID}`, body)
     return data
   } catch (error) {
     throw error

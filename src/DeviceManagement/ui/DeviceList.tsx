@@ -5,11 +5,29 @@ import { Filter } from './Filter'
 import { SystemTypeIcon } from './SystemTypeIcon'
 import { DeleteDeviceDialog } from './DeleteDeviceDialog'
 import { useState } from 'react'
+import { EditDeviceDialog } from './EditDeviceDialog'
 
 export function DeviceList() {
   const { data, isLoading, filterByName, filterDeviceByType, sortByCapacity } =
     useFetchDeviceList()
-  const [deviceID, setDeviceID] = useState<string | undefined>()
+  const [deleteDeviceID, setDeleteDeviceID] = useState<string | undefined>()
+  const [updateDeviceID, setUpdateDeviceID] = useState<string | undefined>()
+
+  function handleOpenDelete(deviceID: string) {
+    setDeleteDeviceID(deviceID)
+  }
+
+  function handleCloseDelete() {
+    setDeleteDeviceID(undefined)
+  }
+
+  function handleOpenEdit(deviceID: string) {
+    setUpdateDeviceID(deviceID)
+  }
+
+  function handleCloseEdit() {
+    setUpdateDeviceID(undefined)
+  }
 
   if (isLoading) {
     return (
@@ -19,14 +37,6 @@ export function DeviceList() {
         <Skeleton height={8} mt={6} width='70%' radius='xl' />
       </Stack>
     )
-  }
-
-  function handleOpenDelete(deviceID: string) {
-    setDeviceID(deviceID)
-  }
-
-  function handleCloseDelete() {
-    setDeviceID(undefined)
   }
 
   return (
@@ -58,11 +68,17 @@ export function DeviceList() {
                   </div>
                   <DeviceMenu
                     onDeleteClick={handleOpenDelete}
+                    onEditClick={handleOpenEdit}
                     deviceID={device.id}
                   />
                   <DeleteDeviceDialog
-                    opened={device.id === deviceID}
+                    opened={device.id === deleteDeviceID}
                     onClose={handleCloseDelete}
+                    device={device}
+                  />
+                  <EditDeviceDialog
+                    opened={device.id === updateDeviceID}
+                    onClose={handleCloseEdit}
                     device={device}
                   />
                 </Group>

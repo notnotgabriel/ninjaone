@@ -7,15 +7,22 @@ type DeviceFormProps = {
   onSubmit: (body: NewDevice) => void
   onClose: () => void
   isPending?: boolean
+  initialValues?: NewDevice
 }
 
-export function DeviceForm({ onSubmit, onClose, isPending }: DeviceFormProps) {
+export function DeviceForm({
+  onSubmit,
+  onClose,
+  isPending,
+  initialValues
+}: DeviceFormProps) {
+  const emptyInitialValues = {
+    system_name: '',
+    type: deviceTypes[0],
+    hdd_capacity: ''
+  }
   const form = useForm<NewDevice>({
-    initialValues: {
-      system_name: '',
-      type: 'WINDOWS',
-      hdd_capacity: ''
-    }
+    initialValues: initialValues || emptyInitialValues
   })
 
   function handleFormSubmit() {

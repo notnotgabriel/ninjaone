@@ -2,13 +2,17 @@ import { Menu, ActionIcon, Image } from '@mantine/core'
 
 import ellipsisIcon from '../../core/ui/assets/icons/ellipsis.svg'
 
+type DeviceMenuProps = {
+  onDeleteClick: (id: string) => void
+  onEditClick: (id: string) => void
+  deviceID: string
+}
+
 export function DeviceMenu({
   onDeleteClick,
+  onEditClick,
   deviceID
-}: {
-  onDeleteClick: (id: string) => void
-  deviceID: string
-}) {
+}: DeviceMenuProps) {
   return (
     <Menu shadow='md' width={150} position='bottom-end'>
       <Menu.Target>
@@ -22,7 +26,7 @@ export function DeviceMenu({
       </Menu.Target>
 
       <Menu.Dropdown>
-        <Menu.Item>Edit</Menu.Item>
+        <Menu.Item onClick={() => onEditClick(deviceID)}>Edit</Menu.Item>
         <Menu.Item c='red' onClick={() => onDeleteClick(deviceID)}>
           Delete
         </Menu.Item>
