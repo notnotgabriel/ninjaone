@@ -1,9 +1,8 @@
-import { Table, Image, Group, Text, Skeleton, Stack } from '@mantine/core'
-
-import windowsIcon from '../../core/ui/assets/icons/windows.svg'
+import { Table, Group, Text, Skeleton, Stack } from '@mantine/core'
 import { DeviceMenu } from './DeviceMenu'
 import { useFetchDeviceList } from './hooks/useFetchDeviceList'
 import { Filter } from './Filter'
+import { SystemTypeIcon } from './SystemTypeIcon'
 
 export function DeviceList() {
   const { data, isLoading, filterByName, filterDeviceByType } =
@@ -38,11 +37,7 @@ export function DeviceList() {
                 <Group>
                   <div>
                     <Group gap={'xs'}>
-                      <Image
-                        src={windowsIcon}
-                        alt=''
-                        style={{ width: '14px' }}
-                      />
+                      <SystemTypeIcon type={device.type} />
                       <Text>{device.system_name}</Text>
                     </Group>
                     <Text size='sm' c='#6E6D7A'>

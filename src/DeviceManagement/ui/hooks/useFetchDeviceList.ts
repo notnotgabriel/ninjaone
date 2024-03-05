@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query'
 import { fetchDeviceList } from '../../infra/DeviceRepository'
 import { useDeviceListFilter } from './useDeviceListFilter'
 import { useEffect } from 'react'
-import { DeviceType } from '../../domain/device'
 
 export function useFetchDeviceList() {
   const {
