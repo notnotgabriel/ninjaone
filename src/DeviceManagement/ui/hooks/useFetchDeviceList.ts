@@ -17,8 +17,6 @@ export function useFetchDeviceList() {
 
   const { deviceList, dispatch } = useDeviceListFilter()
 
-  const data = deviceList?.length ? deviceList : fetchedData
-
   useEffect(() => {
     if (isFetched && fetchedData?.length) {
       dispatch({
@@ -26,7 +24,7 @@ export function useFetchDeviceList() {
         data: fetchedData
       })
     }
-  }, [isFetched, data?.length])
+  }, [isFetched, fetchedData?.length])
 
   function filterByName(name: string | null) {
     dispatch({
@@ -50,7 +48,7 @@ export function useFetchDeviceList() {
   }
 
   return {
-    data,
+    data: deviceList,
     isFetched,
     filterByName,
     filterDeviceByType,

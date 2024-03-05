@@ -62,7 +62,8 @@ function reducer(state: FilterStateProps, action: Action) {
     case 'UPDATE_DATA':
       return {
         ...state,
-        data: action.data
+        data: action.data,
+        deviceList: action.data
       }
     case 'FILTER_BY_NAME': {
       const filters = {
