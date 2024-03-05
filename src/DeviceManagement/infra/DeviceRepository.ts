@@ -1,5 +1,5 @@
 import HttpClient from '../../core/infra/HttpClient'
-import { type Device } from '../domain/device'
+import { type NewDevice, type Device } from '../domain/device'
 
 export async function fetchDeviceList(): Promise<Device[]> {
   try {
@@ -28,7 +28,7 @@ export async function deleteDevice(id: string): Promise<Device> {
   }
 }
 
-export async function createDevice(body: any): Promise<Device> {
+export async function createDevice(body: NewDevice): Promise<Device> {
   try {
     const { data } = await HttpClient.post('/devices', body)
     return data

@@ -1,22 +1,24 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 
-import { deleteDevice } from '../../infra/DeviceRepository'
+import { createDevice } from '../../infra/DeviceRepository'
+import { type NewDevice } from '../../domain/device'
 
-export function useDeleteDevice() {
+export function useAddDevice({ onSuccess }: { onSuccess: () => void }) {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (deviceID: string) => deleteDevice(deviceID),
+    mutationFn: (body: NewDevice) => createDevice(body),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['deviceList'] })
-      toast.success('Device deleted with success', {
+      toast.success('Device created with success', {
         hideProgressBar: true,
         position: 'top-right'
       })
+      onSuccess()
     },
     onError: () => {
-      toast.error('Failed to delete the device', {
+      toast.error('Failed to create the device', {
         hideProgressBar: true,
         position: 'top-right'
       })

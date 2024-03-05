@@ -7,3 +7,5 @@ export type Device = {
   type: DeviceType
   hdd_capacity: string
 }
+
+export type NewDevice = Omit<Device, 'id'>

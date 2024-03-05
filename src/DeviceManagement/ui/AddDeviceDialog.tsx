@@ -7,10 +7,24 @@ import {
   Button,
   type ModalProps
 } from '@mantine/core'
+import { useForm } from '@mantine/form'
+
+import { type NewDevice, deviceTypes } from '../domain/device'
+import { useAddDevice } from './hooks/useAddDevice'
 
 export function AddDeviceDialog({ opened, onClose }: ModalProps) {
-  const deviceTypeOptions = ['All', 'React', 'Angular', 'Vue', 'Svelte']
-  const hddCapacitySortOptions = ['ascending', 'descending']
+  const { mutate, isPending } = useAddDevice({ onSuccess: onClose })
+  const form = useForm<NewDevice>({
+    initialValues: {
+      system_name: '',
+      type: 'WINDOWS',
+      hdd_capacity: ''
+    }
+  })
+
+  function handleFormSubmit() {
+    mutate(form.values)
+  }
 
   return (
     <Modal
@@ -23,19 +37,31 @@ export function AddDeviceDialog({ opened, onClose }: ModalProps) {
       <Modal.Body p={0}>
         <Stack>
           <Stack gap='sm'>
-            <TextInput label='System name *' />
+            <TextInput
+              label='System name *'
+              {...form.getInputProps('system_name')}
+            />
             <Select
               label='Device Type *'
               placeholder='Select type'
-              data={deviceTypeOptions}
+              data={deviceTypes}
+              {...form.getInputProps('type')}
             />
-            <Select label='HDD Capacity (GB) *' data={hddCapacitySortOptions} />
+            <TextInput
+              label='HDD capacity (GB) *'
+              {...form.getInputProps('hdd_capacity')}
+            />
           </Stack>
           <Group gap='xs' justify='end'>
             <Button type='button' variant='outline' onClick={onClose}>
               Cancel
             </Button>
-            <Button type='button' variant='filled'>
+            <Button
+              type='button'
+              variant='filled'
+              onClick={handleFormSubmit}
+              loading={isPending}
+            >
               Submit
             </Button>
           </Group>
