@@ -3,10 +3,13 @@ import { DeviceMenu } from './DeviceMenu'
 import { useFetchDeviceList } from './hooks/useFetchDeviceList'
 import { Filter } from './Filter'
 import { SystemTypeIcon } from './SystemTypeIcon'
+import { DeleteDeviceDialog } from './DeleteDeviceDialog'
+import { useState } from 'react'
 
 export function DeviceList() {
   const { data, isLoading, filterByName, filterDeviceByType, sortByCapacity } =
     useFetchDeviceList()
+  const [deviceID, setDeviceID] = useState<string | undefined>()
 
   if (isLoading) {
     return (
@@ -16,6 +19,14 @@ export function DeviceList() {
         <Skeleton height={8} mt={6} width='70%' radius='xl' />
       </Stack>
     )
+  }
+
+  function handleOpenDelete(deviceID: string) {
+    setDeviceID(deviceID)
+  }
+
+  function handleCloseDelete() {
+    setDeviceID(undefined)
   }
 
   return (
@@ -45,7 +56,15 @@ export function DeviceList() {
                       {device.type} workstation - {device.hdd_capacity} GB
                     </Text>
                   </div>
-                  <DeviceMenu />
+                  <DeviceMenu
+                    onDeleteClick={handleOpenDelete}
+                    deviceID={device.id}
+                  />
+                  <DeleteDeviceDialog
+                    opened={device.id === deviceID}
+                    onClose={handleCloseDelete}
+                    device={device}
+                  />
                 </Group>
               </Table.Td>
             </Table.Tr>
