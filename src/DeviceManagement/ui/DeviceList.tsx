@@ -1,9 +1,11 @@
 import { Table, Image, Group, Text } from '@mantine/core'
+import createHttpClient from '../../core/infra/HttpClient'
 
 import windowsIcon from '../../core/ui/assets/icons/windows.svg'
 import { DeviceMenu } from './DeviceMenu'
 
 export function DeviceList() {
+  createHttpClient.get('/devices')
   return (
     <>
       <Table>
