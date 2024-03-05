@@ -6,7 +6,8 @@ import { useFetchDeviceList } from './hooks/useFetchDeviceList'
 import { Filter } from './Filter'
 
 export function DeviceList() {
-  const { data, isLoading, filterByName } = useFetchDeviceList()
+  const { data, isLoading, filterByName, filterDeviceByType } =
+    useFetchDeviceList()
 
   if (isLoading) {
     return (
@@ -20,7 +21,10 @@ export function DeviceList() {
 
   return (
     <>
-      <Filter filterByName={filterByName} />
+      <Filter
+        filterByName={filterByName}
+        filterDeviceByType={filterDeviceByType}
+      />
       <Table>
         <Table.Thead>
           <Table.Tr>
