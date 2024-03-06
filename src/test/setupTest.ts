@@ -1,5 +1,8 @@
 import '@testing-library/jest-dom'
-import { vi } from 'vitest'
+import '@testing-library/jest-dom/vitest'
+import { afterEach, vi } from 'vitest'
+
+import { server } from '../mocks/server'
 
 // Source: https://mantine.dev/guides/jest/
 const { getComputedStyle } = window
@@ -26,3 +29,7 @@ class ResizeObserver {
 }
 
 window.ResizeObserver = ResizeObserver
+
+beforeAll(() => server.listen({ onUnhandledRequest: 'error' }))
+afterAll(() => server.close())
+afterEach(() => server.resetHandlers())
