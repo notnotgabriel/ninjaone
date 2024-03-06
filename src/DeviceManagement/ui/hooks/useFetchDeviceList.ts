@@ -6,11 +6,7 @@ import { useEffect } from 'react'
 import { SortingType } from '../../domain/filter'
 
 export function useFetchDeviceList() {
-  const {
-    data: fetchedData,
-    isFetched,
-    ...rest
-  } = useQuery({
+  const { data, isFetched, ...rest } = useQuery({
     queryKey: ['deviceList'],
     queryFn: fetchDeviceList
   })
@@ -18,13 +14,13 @@ export function useFetchDeviceList() {
   const { deviceList, dispatch } = useDeviceListFilter()
 
   useEffect(() => {
-    if (isFetched && fetchedData?.length) {
+    if (isFetched && data?.length) {
       dispatch({
         type: 'UPDATE_DATA',
-        data: fetchedData
+        data
       })
     }
-  }, [isFetched, fetchedData?.length])
+  }, [isFetched, data?.length])
 
   function filterByName(name: string | null) {
     dispatch({

@@ -59,12 +59,13 @@ function filterDevices({ filters, data }: FilterStateProps) {
 
 function reducer(state: FilterStateProps, action: Action) {
   switch (action.type) {
-    case 'UPDATE_DATA':
+    case 'UPDATE_DATA': {
       return {
         ...state,
         data: action.data,
         deviceList: action.data
       }
+    }
     case 'FILTER_BY_NAME': {
       const filters = {
         name: action.name?.toLowerCase()
@@ -120,8 +121,10 @@ const initialState = {
 export function useDeviceListFilter() {
   const [{ deviceList }, dispatch] = useReducer(reducer, {
     ...initialState,
-    data: []
+    data: [],
+    deviceList: []
   })
+
   return {
     dispatch,
     deviceList

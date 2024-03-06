@@ -62,7 +62,11 @@ export function DeviceList() {
                       <SystemTypeIcon type={device.type} />
                       <Text>{device.system_name}</Text>
                     </Group>
-                    <Text size='sm' c='#6E6D7A'>
+                    <Text
+                      size='sm'
+                      c='#6E6D7A'
+                      data-testid='device-description'
+                    >
                       {device.type} workstation - {device.hdd_capacity} GB
                     </Text>
                   </div>
