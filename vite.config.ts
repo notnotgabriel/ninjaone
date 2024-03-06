@@ -10,7 +10,6 @@ export default defineConfig({
   test: {
     setupFiles: ['./src/test/setupTest.ts'],
     environment: 'jsdom',
-    testNamePattern: /\.\/src\/(?:.*\/)*[^/]+\.test\.tsx?$/,
     globals: true
   }
 })
