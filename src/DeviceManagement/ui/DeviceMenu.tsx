@@ -20,8 +20,9 @@ export function DeviceMenu({
           aria-label='device actions'
           variant='transparent'
           ml={'auto'}
+          data-testid='device-actions'
         >
-          <Image h={20} src={ellipsisIcon} />
+          <Image h={20} src={ellipsisIcon} title='device actions' />
         </ActionIcon>
       </Menu.Target>
 

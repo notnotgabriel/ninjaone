@@ -141,7 +141,7 @@ describe('DevicesPage', () => {
         return HttpResponse.json([mockedDevices[0]], { status: 200 })
       }),
       http.post('/devices', () => {
-        return HttpResponse.json(mockedDevices[0], { status: 200 })
+        return HttpResponse.json([mockedDevices[0]], { status: 200 })
       })
     )
     const { user } = setup()
@@ -197,5 +197,149 @@ describe('DevicesPage', () => {
         })
       ).toBeVisible()
     })
+  })
+
+  it('should edit device', async () => {
+    const updatedName = 'armando-guest'
+    server.use(
+      http.get('/devices', function* () {
+        yield HttpResponse.json([mockedDevices[0]])
+        return HttpResponse.json(
+          [
+            {
+              ...mockedDevices[0],
+              system_name: updatedName
+            }
+          ],
+          { status: 200 }
+        )
+      }),
+      http.put('/devices/:id', () => {
+        return HttpResponse.json([])
+      })
+    )
+    const { user } = setup()
+
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId('loading-device-list')
+    )
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('columnheader', {
+          name: /device/i
+        })
+      ).toBeVisible()
+    })
+
+    user.click(screen.getByTestId('device-actions'))
+
+    user.click(
+      await screen.findByRole('menuitem', {
+        name: /edit/i
+      })
+    )
+
+    expect(
+      await screen.findByRole('dialog', {
+        name: /edit device armando/i
+      })
+    ).toBeVisible()
+
+    expect(
+      screen.getByRole('textbox', {
+        name: /system name \*/i
+      })
+    ).toHaveValue('ARMANDO')
+    expect(
+      screen.getByRole('textbox', {
+        name: /device type \*/i
+      })
+    ).toHaveValue('WINDOWS')
+    expect(
+      screen.getByRole('textbox', {
+        name: /hdd capacity \(gb\) \*/i
+      })
+    ).toHaveValue('256')
+
+    user.type(
+      screen.getByRole('textbox', {
+        name: /system name \*/i
+      }),
+      updatedName
+    )
+
+    user.click(
+      screen.getByRole('button', {
+        name: /submit/i
+      })
+    )
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('dialog', {
+          name: /edit device armando/i
+        })
+      ).not.toBeVisible()
+    })
+
+    expect(
+      screen.getByRole('cell', {
+        name: /armando-guest windows workstation \- 256 gb/i
+      })
+    ).toBeVisible()
+  })
+
+  it('should delete the device', async () => {
+    server.use(
+      http.get('/devices', function* () {
+        yield HttpResponse.json([mockedDevices[0]], { status: 200 })
+        return HttpResponse.json([], { status: 200 })
+      }),
+      http.delete('/devices/:id', () => {
+        return HttpResponse.json([], { status: 200 })
+      })
+    )
+
+    const { user } = setup()
+
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId('loading-device-list')
+    )
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('columnheader', {
+          name: /device/i
+        })
+      ).toBeVisible()
+    })
+
+    user.click(screen.getByTestId('device-actions'))
+
+    user.click(
+      await screen.findByRole('menuitem', {
+        name: /delete/i
+      })
+    )
+
+    const dialog = await screen.findByRole('dialog', {
+      name: /delete device/i
+    })
+
+    expect(within(dialog).getByText(/armando/i)).toBeVisible()
+    user.click(
+      screen.getByRole('button', {
+        name: /delete/i
+      })
+    )
+
+    expect(
+      expect(
+        screen.queryByRole('cell', {
+          name: /armando-guest windows workstation \- 256 gb/i
+        })
+      ).toBeNull()
+    )
   })
 })
