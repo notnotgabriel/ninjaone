@@ -33,21 +33,30 @@ const mockedDevices = [
   }
 ]
 
+function setup() {
+  const user = userEvent.setup()
+  const render = renderer(<DevicesPage />)
+    .withReactQuery()
+    .render()
+
+  return {
+    ...render,
+    user
+  }
+}
+
 describe('DevicesPage', () => {
   afterEach(() => {
     server.resetHandlers()
   })
 
   it('should render the devices list and filter', async () => {
-    const user = userEvent.setup()
     server.use(
       http.get('/devices', () => {
         return HttpResponse.json(mockedDevices, { status: 200 })
       })
     )
-    renderer(<DevicesPage />)
-      .withReactQuery()
-      .render()
+    const { user } = setup()
 
     await waitForElementToBeRemoved(() =>
       screen.queryByTestId('loading-device-list')
@@ -123,5 +132,70 @@ describe('DevicesPage', () => {
     const devices = screen.getAllByTestId('device-description')
     expect(devices[0]).toHaveTextContent('WINDOWS workstation - 256 GB')
     expect(devices[1]).toHaveTextContent('WINDOWS workstation - 500 GB')
+  })
+
+  it('should add new device', async () => {
+    server.use(
+      http.get('/devices', function* () {
+        yield HttpResponse.json([], { status: 200 })
+        return HttpResponse.json([mockedDevices[0]], { status: 200 })
+      }),
+      http.post('/devices', () => {
+        return HttpResponse.json(mockedDevices[0], { status: 200 })
+      })
+    )
+    const { user } = setup()
+
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId('loading-device-list')
+    )
+
+    expect(screen.getAllByRole('row')).toHaveLength(1)
+
+    user.click(
+      screen.getByRole('button', {
+        name: /\+ add device/i
+      })
+    )
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('dialog', {
+          name: /add device/i
+        })
+      ).toBeVisible()
+    })
+
+    user.type(
+      screen.getByRole('textbox', {
+        name: /system name \*/i
+      }),
+      'test device'
+    )
+    user.type(
+      screen.getByRole('textbox', {
+        name: /hdd capacity \(gb\) \*/i
+      }),
+      '256'
+    )
+    user.click(
+      screen.getByRole('button', {
+        name: /submit/i
+      })
+    )
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('dialog', {
+          name: /add device/i
+        })
+      ).not.toBeVisible()
+
+      expect(
+        screen.getByRole('cell', {
+          name: /armando windows workstation \- 256 gb/i
+        })
+      ).toBeVisible()
+    })
   })
 })
